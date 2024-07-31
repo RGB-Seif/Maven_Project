@@ -28,7 +28,7 @@ public class AddToCartFromRecommendedTests {
     private By homePageImg = By.xpath("//img[@src=\"/static/images/home/logo.png\"]");
     private By recommendedItemsTitle = By.xpath("//div[@class=\"recommended_items\"]//h2[@class=\"title text-center\"]");
     private By cartTable = By.xpath("//table[@class=\"table table-condensed\"]");
-    private By recommendedItem = By.xpath("//div[@class=\"recommended_items\"]//a[@data-product-id=\"4\"]");
+    private By recommendedItem = By.xpath("//div[@class=\"recommended_items\"]//a[@data-product-id=\"1\"]");
 
 
     @BeforeMethod
@@ -36,6 +36,7 @@ public class AddToCartFromRecommendedTests {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         orderPage = new OrderPage(driver);
+        wait= new WebDriverWait(driver, Duration.ofSeconds(20));
         js = (JavascriptExecutor) driver;
         orderPage.navigateToURL(automationExerciseURL);
     }
@@ -46,11 +47,10 @@ public class AddToCartFromRecommendedTests {
         orderPage.scrollToElement();
         Assert.assertTrue(driver.findElement(recommendedItemsTitle).isDisplayed());
         WebElement recommendedItem1 = driver.findElement(recommendedItem);
-        driver.findElement(recommendedItem).click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         wait.until(ExpectedConditions.visibilityOf(recommendedItem1));
+        orderPage.addRecommendedItemToCart();
         orderPage.clickOnViewCart();
-        Assert.assertTrue(driver.findElement(cartTable).getText().contains("Stylish Dress"));
+        Assert.assertTrue(driver.findElement(cartTable).getText().contains("Blue Top"));
 
     }
 

@@ -53,7 +53,7 @@ public class OrderPage {
     private By expirationMonthField = By.xpath("//input[@name=\"expiry_month\"]");
     private By expirationYearField = By.xpath("//input[@name=\"expiry_year\"]");
     private By payOrderButton = By.xpath("//button[@id=\"submit\"]");
-    private By recommendedItem = By.xpath("//div[@class=\"recommended_items\"]//a[@data-product-id=\"4\"]");
+    private By recommendedItem = By.xpath("//div[@class=\"recommended_items\"]//a[@data-product-id=\"1\"]");
     private By recommendedItemsTitle = By.xpath("//div[@class=\"recommended_items\"]//h2[@class=\"title text-center\"]");
     private By viewCartButton = By.xpath("//div[@class=\"modal-content\"]//a[@href=\"/view_cart\"]");
 
@@ -161,6 +161,10 @@ public class OrderPage {
         new Actions(driver)
                 .scrollToElement(recommendedTitle)
                 .perform();
+    }
+
+    public void addRecommendedItemToCart() {
+        driver.findElement(recommendedItem).click();
     }
 
     public void clickOnViewCart() {
