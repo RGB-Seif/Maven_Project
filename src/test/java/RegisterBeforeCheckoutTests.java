@@ -1,17 +1,24 @@
+import org.example.LoginPage;
+import org.example.OrderPage;
 import org.example.RegisterPage;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class RegisterTests1 {
+import java.util.ArrayList;
+import java.util.List;
+
+public class RegisterBeforeCheckoutTests {
     private WebDriver driver;
+    private OrderPage orderPage;
     private RegisterPage registerPage;
+    private JavascriptExecutor js;
 
     private String automationExerciseURL = "https://automationexercise.com/";
     private String name = "User1";
@@ -23,36 +30,63 @@ public class RegisterTests1 {
     private String firstN = "User";
     private String lastN = "One";
     private String company = "Amit";
+    private String country = "canada";
     private String addressOne = "Nasr City";
     private String addressTwo = "New Cairo";
     private String state = "Ontario";
     private String city = "Toronto";
     private String zipCode = "11835";
     private String mobileNumber = "01111111111";
+    private String fullName ="User X";
+    private String nameOnCard= "user x";
+    private String cardNumber = "12345678987654321";
+    private String cvc = "456";
+    private String expMonth = "10";
+    private String expYear = "26";
+    private String comment = "Please send the items as advertised and same colors. thank you";
+
+   /* List<String> addressDetailsList = new ArrayList<>();
+    {
+        addressDetailsList.add(fullName);
+        addressDetailsList.add(company);
+        addressDetailsList.add(addressOne);
+        addressDetailsList.add(addressTwo);
+        addressDetailsList.add(state);
+        addressDetailsList.add(city);
+        addressDetailsList.add(zipCode);
+        addressDetailsList.add(country);
+        addressDetailsList.add(mobileNumber);
+        addressDetailsList.add(zipCode);
+    }
+*/
 
 
     private By homePageImg = By.xpath("//img[@src=\"/static/images/home/logo.png\"]");
-    private By signUpTitle = By.xpath("//div[@class=\"signup-form\"]//h2");
     private By accountInfoTitle = By.xpath("//b[text()=\"Enter Account Information\"]");
-    private By infoEmail = By.id("email");
     private By loggedInAsUserTitle = By.xpath("//i[@class=\"fa fa-user\"]");
     private By accountCreatedTitle = By.xpath("//h2[@data-qa=\"account-created\"]");
     private By accountDeletedTitle = By.xpath("//h2[@data-qa=\"account-deleted\"]");
+    private By successMessage = By.xpath("//div[@id=\"success_message\"]//div[@class=\"alert-success alert\"]");
+    private By orangeCartButton = By.xpath("//ul[@class=\"nav navbar-nav\"]//a[@href=\"/view_cart\" and @style= \"color: orange;\"]");
+    private By addressBox = By.xpath("//ul[@id=\"address_delivery\"]");
+    private By infoEmail = By.id("email");
+
 
 
     @BeforeMethod
     public void setup(){
         driver = new ChromeDriver();
         driver.manage().window().maximize();
+        orderPage = new OrderPage(driver);
         registerPage = new RegisterPage(driver);
-        registerPage.navigateToURL(automationExerciseURL);
+        js = (JavascriptExecutor) driver;
+        orderPage.navigateToURL(automationExerciseURL);
     }
 
     @Test
-    public void validateRegister(){
+    public void validateRegisterBeforeCheckout(){
         Assert.assertTrue(driver.findElement(homePageImg).isDisplayed());
         registerPage.clickOnSignInPageButton();
-        Assert.assertTrue(driver.findElement(signUpTitle).isDisplayed());
         registerPage.fillSignInData(name, email);
         registerPage.clickOnSignUpButton();
         Assert.assertTrue(driver.findElement(accountInfoTitle).isDisplayed());
@@ -69,14 +103,22 @@ public class RegisterTests1 {
         Assert.assertTrue(driver.findElement(accountCreatedTitle).isDisplayed());
         registerPage.clickOnContinueButton();
         Assert.assertTrue(driver.findElement(loggedInAsUserTitle).isDisplayed());
+        orderPage.addProductsToCart();
+        orderPage.clickCartButton();
+        Assert.assertTrue(driver.findElement(orangeCartButton).isDisplayed());
+        orderPage.clickProceedToCheckout();
+        orderPage.fillDescriptionAndPlaceOrder(comment);
+        orderPage.fillPaymentDetails(nameOnCard, cardNumber, cvc, expMonth, expYear);
+        orderPage.clickPayAndConfirmButton();
+        //Assert.assertTrue(driver.findElement(successMessage).getText().contains("Your order has been placed successfully") );
         registerPage.clickOnDeleteAccountButton();
         Assert.assertTrue(driver.findElement(accountDeletedTitle).isDisplayed());
-
+        registerPage.clickOnContinueAfterDelete();
 
     }
 
-   @AfterMethod
-   public void tearDown(){
+    @AfterMethod
+    public void tearDown(){
         driver.quit();}
 }
 

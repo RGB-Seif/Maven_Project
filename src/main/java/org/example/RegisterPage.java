@@ -54,7 +54,7 @@ public class RegisterPage {
         driver.get(URL);
     }
 
-    public void clickOnSignPageButton() {
+    public void clickOnSignInPageButton() {
         driver.findElement(signupPageButton).click();
     }
 
@@ -66,7 +66,7 @@ public class RegisterPage {
         driver.findElement(registerMail).sendKeys(email);
     }
 
-    public void fillLoginData(String name, String email) {
+    public void fillSignInData(String name, String email) {
         fillName(name);
         fillRegisterEmail(email);
     }
@@ -187,6 +187,9 @@ public class RegisterPage {
     }
     public void clickOnDeleteAccountButton (){
         driver.findElement(deleteAccountButton).click();
+    }
+    public void clickOnContinueAfterDelete () {
+        driver.findElement(continueButton).click();
     }
 
 }

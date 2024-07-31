@@ -4,6 +4,10 @@ import dev.failsafe.internal.util.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.security.PublicKey;
 import java.time.Duration;
@@ -11,6 +15,7 @@ import java.time.Duration;
 public class OrderPage {
 
     private WebDriver driver;
+    private WebDriverWait wait;
 
     public OrderPage(WebDriver driver) {
         this.driver = driver;
@@ -48,6 +53,11 @@ public class OrderPage {
     private By expirationMonthField = By.xpath("//input[@name=\"expiry_month\"]");
     private By expirationYearField = By.xpath("//input[@name=\"expiry_year\"]");
     private By payOrderButton = By.xpath("//button[@id=\"submit\"]");
+    private By recommendedItem = By.xpath("//div[@class=\"recommended_items\"]//a[@data-product-id=\"4\"]");
+    private By recommendedItemsTitle = By.xpath("//div[@class=\"recommended_items\"]//h2[@class=\"title text-center\"]");
+    private By viewCartButton = By.xpath("//div[@class=\"modal-content\"]//a[@href=\"/view_cart\"]");
+
+
 
 
     public void navigateToURL(String URL) {
@@ -146,6 +156,16 @@ public class OrderPage {
         driver.findElement(payOrderButton).click();
     }
 
+    public void scrollToElement() {
+        WebElement recommendedTitle = driver.findElement(recommendedItemsTitle);
+        new Actions(driver)
+                .scrollToElement(recommendedTitle)
+                .perform();
+    }
 
+    public void clickOnViewCart() {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        driver.findElement(viewCartButton).click();
+    }
 
 }
