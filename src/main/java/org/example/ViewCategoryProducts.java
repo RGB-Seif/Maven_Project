@@ -3,6 +3,8 @@ package org.example;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.time.Duration;
+
 public class ViewCategoryProducts {
     //driver
     private WebDriver driver;
@@ -24,6 +26,7 @@ public class ViewCategoryProducts {
     }
 
     public void clickOnWomenButton (){
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         driver.findElement(womenButton).click();
     }
 
